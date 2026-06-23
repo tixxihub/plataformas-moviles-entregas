@@ -1,0 +1,49 @@
+```css
+/* Centrar el título */
+body article h1.titulo{
+text-align:center;
+}
+
+/* Fuente serif para todos los párrafos */
+body p{
+font-family:serif;
+}
+
+/* Cambiar fondo del primer párrafo */
+#primer-parrafo{
+background-color:#CEE;
+}
+
+/* Cambiar color del em del primer párrafo */
+#primer-parrafo em{
+color:#933;
+}
+
+/* Mostrar outline en todos los links */
+a{
+outline:1px solid #333;
+}
+
+/* Opacidad completa del texto fuente */
+body p.fuente{
+opacity:100%;
+}
+
+/* Fondo para párrafos sin id */
+p:not([id]){
+background-color:rgba(190,120,240,0.6);
+}
+
+
+/* Intentar cambiar color del texto fuente
+(no usamos !important porque la consigna lo evita) */
+html body p.fuente.parrafo{
+color:#000;
+}
+
+/* Clase complicado */
+span.complicado{
+font-weight:bold;
+color:#C62 !important;
+}
+```
