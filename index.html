@@ -1,18 +1,605 @@
 <!DOCTYPE html>
-<html>
-   <head>
-      <title>Hola Mundo!</title>
-   </head>
-   <body>
-     <h1>Trabajos Prácticos</h1>
-     <p>Listado de trabajos prácticos para la materia Plataformas Móviles</p>
-     <ul>
-       <li><a href="tp-1/">TP 1 - HTML </a></li>
-       <li><a href="./tp-2/index.html">TP 2 - Selectores </a></li>
-       <li><a href="./tp-3/index.html">TP 3 - Especificidad CSS </a></li>
-       <li><a href="./tp-4/index.html">TP 4 - Media Queries </a></li>
-       <li><a href="tp-6/index.html">TP 6 - Grilla Bootstrap </a></li> 
-       <li><a href="./tp-7/index.html">TP 7 - Bootstrap (2) </a></li>
-      </ul>
-   </body>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curia Remix - Plataformas Móviles</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Permanent+Marker&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ==========================================================================
+           VARIABLES DE COLOR Y CONFIGURACIÓN (Estética Samudio Remix)
+           ========================================================================== */
+        :root {
+            --azul-electrico: #00A8FF;
+            --verde-neon: #00FF99;
+            --amarillo-brillante: #FFF04D;
+            --negro-fondo: #0a0a0c;
+            --tarjeta-bg: rgba(10, 10, 12, 0.7);
+            --glow-azul: 0 0 15px rgba(0, 168, 255, 0.6), 0 0 30px rgba(0, 168, 255, 0.3);
+            --glow-verde: 0 0 15px rgba(0, 255, 153, 0.6), 0 0 30px rgba(0, 255, 153, 0.3);
+            --glow-amarillo: 0 0 15px rgba(255, 240, 77, 0.7);
+        }
+
+        /* RESET & GENERAL */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--negro-fondo);
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(0, 168, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(0, 255, 153, 0.12) 0%, transparent 40%);
+        }
+
+        /* TEXTURA VINTAGE / EFECTO VHS */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        /* Capa de rayones y suciedad estilo tapa de CD vieja */
+        .vhs-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: url('https://www.transparenttextures.com/patterns/black-thread.png');
+            opacity: 0.15;
+            z-index: 998;
+            pointer-events: none;
+        }
+
+        /* Canvas para partículas de polvo trackeadas por JS */
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ANIMACIÓN DE ENTRADA GLOBAL */
+        @keyframes fadeInIntro {
+            0% { opacity: 0; transform: scale(1.03); filter: blur(5px); }
+            100% { opacity: 1; transform: scale(1); filter: blur(0); }
+        }
+
+        .main-wrapper {
+            animation: fadeInIntro 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ==========================================================================
+           HERO SECTION: TITULO & FIAT UNO
+           ========================================================================== */
+        .hero-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding: 40px 10px;
+            min-height: 550px;
+            justify-content: center;
+        }
+
+        @media (min-width: 992px) {
+            .hero-container {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 60px 40px;
+            }
+        }
+
+        /* Textos del Logo */
+        .brand-logo {
+            text-align: center;
+            z-index: 10;
+            margin-bottom: 30px;
+        }
+
+        @media (min-width: 992px) {
+            .brand-logo {
+                text-align: left;
+                flex: 1;
+            }
+        }
+
+        .title-curia {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 5.5rem;
+            line-height: 0.85;
+            color: var(--amarillo-brillante);
+            text-shadow: 
+                -3px -3px 0 var(--azul-electrico),  
+                 3px -3px 0 var(--azul-electrico),
+                -3px  3px 0 var(--azul-electrico),
+                 3px  3px 0 var(--azul-electrico),
+                 0 0 30px var(--azul-electrico);
+            letter-spacing: 2px;
+            transform: rotate(-3deg);
+            display: block;
+            margin-bottom: 5px;
+            animation: pulseGlow 3s infinite alternate;
+        }
+
+        .title-remix {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 6rem;
+            line-height: 0.85;
+            color: #ffffff;
+            text-shadow: 
+                -3px -3px 0 var(--verde-neon),  
+                 3px -3px 0 var(--verde-neon),
+                -3px  3px 0 var(--verde-neon),
+                 3px  3px 0 var(--verde-neon),
+                 0 0 40px var(--verde-neon);
+            letter-spacing: 4px;
+            transform: rotate(-5deg) translateY(-10px);
+            display: block;
+        }
+
+        /* El Protagonista: FIAT UNO */
+        .car-showcase {
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        @media (min-width: 992px) {
+            .car-showcase {
+                flex: 1.3;
+            }
+        }
+
+        /* Reemplazá esta URL por tu foto recortada en formato PNG/WebP sin fondo si querés un acabado perfecto */
+        .fiat-uno {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            transform: rotate(-2deg) scale(1.05);
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.9)) drop-shadow(0 0 25px rgba(0, 168, 255, 0.4));
+            animation: carFloat 4s ease-in-out infinite;
+        }
+
+        /* Resplandores de fondo simulando faros neón tras el auto */
+        .car-showcase::after {
+            content: '';
+            position: absolute;
+            width: 70%;
+            height: 50%;
+            background: radial-gradient(ellipse, rgba(0, 255, 153, 0.3) 0%, transparent 70%);
+            bottom: 10%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* ==========================================================================
+           SUBTÍTULOS E INDICE
+           ========================================================================== */
+        .section-divider {
+            text-align: center;
+            margin: 40px 0 30px 0;
+            position: relative;
+        }
+
+        .subtitle-indice {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--verde-neon);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: var(--glow-verde);
+            margin-bottom: 5px;
+        }
+
+        .subtitle-materia {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            color: #ffffff;
+            opacity: 0.8;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+        }
+
+        /* ==========================================================================
+           GRILLA DE TRABAJOS (16 TARJETAS)
+           ========================================================================== */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 20px 10px;
+            margin-bottom: 60px;
+        }
+
+        .card-tp {
+            background: var(--tarjeta-bg);
+            border: 2px solid rgba(0, 168, 255, 0.4);
+            border-radius: 12px;
+            padding: 30px 20px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-shadow: inset 0 0 15px rgba(0, 168, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Ajustes para tarjetas inactivas/deshabilitadas */
+        .card-tp.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        /* Efectos Hover activos */
+        .card-tp:not(.disabled):hover {
+            transform: translateY(-8px) scale(1.03);
+            border-color: var(--verde-neon);
+            box-shadow: var(--glow-verde), inset 0 0 20px rgba(0, 255, 153, 0.2);
+        }
+
+        /* Número del TP */
+        .card-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--azul-electrico), var(--verde-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            transition: all 0.4s ease;
+        }
+
+        .card-tp:not(.disabled):hover .card-number {
+            background: linear-gradient(135deg, var(--amarillo-brillante), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow-amarillo);
+        }
+
+        /* Texto descriptivo chico */
+        .card-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #a0a0aa;
+            font-weight: bold;
+            transition: color 0.4s ease;
+        }
+
+        .card-tp:not(.disabled):hover .card-label {
+            color: #ffffff;
+        }
+
+        /* Línea decorativa neón inferior en la tarjeta */
+        .card-tp::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--azul-electrico), var(--verde-neon));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .card-tp:not(.disabled):hover::after {
+            transform: scaleX(1);
+        }
+
+        /* ==========================================================================
+           FOOTER ESTILO PORTADA CD / REMIX
+           ========================================================================== */
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 20px;
+            text-align: center;
+            background: rgba(5, 5, 7, 0.9);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-socials {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .btn-social {
+            color: #ffffff;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border: 1px solid rgba(0, 168, 255, 0.3);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            background: rgba(0, 168, 255, 0.03);
+        }
+
+        .btn-social i {
+            font-size: 1.2rem;
+            color: var(--azul-electrico);
+            transition: color 0.3s ease;
+        }
+
+        .btn-social:hover {
+            border-color: var(--amarillo-brillante);
+            box-shadow: var(--glow-amarillo);
+            color: var(--amarillo-brillante);
+            transform: scale(1.05);
+        }
+
+        .btn-social:hover i {
+            color: var(--amarillo-brillante);
+        }
+
+        .footer-credits {
+            font-size: 0.85rem;
+            color: #555566;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ==========================================================================
+           ANIMACIONES CLAVE (KEYFRAMES)
+           ========================================================================== */
+        @keyframes carFloat {
+            0% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-10px) rotate(-1deg); }
+            100% { transform: translateY(0) rotate(-2deg); }
+        }
+
+        @keyframes pulseGlow {
+            0% { text-shadow: -3px -3px 0 var(--azul-electrico), 3px -3px 0 var(--azul-electrico), -3px 3px 0 var(--azul-electrico), 3px 3px 0 var(--azul-electrico), 0 0 20px var(--azul-electrico); }
+            100% { text-shadow: -3px -3px 0 var(--azul-electrico), 3px -3px 0 var(--azul-electrico), -3px 3px 0 var(--azul-electrico), 3px 3px 0 var(--azul-electrico), 0 0 40px var(--azul-electrico), 0 0 60px rgba(0, 168, 255, 0.6); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="vhs-overlay"></div>
+    
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="main-wrapper">
+        
+        <header class="hero-container">
+            <div class="brand-logo">
+                <span class="title-curia">CURIA</span>
+                <span class="title-remix">REMIX</span>
+            </div>
+            
+            <div class="car-showcase" id="parallax-car">
+                <img src="https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?auto=format&fit=crop&q=80&w=800" alt="Fiat Uno Blanco Tuning" class="fiat-uno">
+            </div>
+        </header>
+
+        <div class="section-divider">
+            <h2 class="subtitle-indice">═ Índice de Trabajos ═</h2>
+            <p class="subtitle-materia">Plataformas Móviles</p>
+        </div>
+
+        <main class="grid-container">
+            <a href="tp-1/" class="card-tp">
+                <span class="card-number">01</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+            
+            <a href="tp-2/index.html" class="card-tp">
+                <span class="card-number">02</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="tp-3/index.html" class="card-tp">
+                <span class="card-number">03</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="tp-4/index.html" class="card-tp">
+                <span class="card-number">04</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="tp-6/index.html" class="card-tp">
+                <span class="card-number">05</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="tp-7/index.html" class="card-tp">
+                <span class="card-number">06</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="#" class="card-tp disabled" onclick="return false;">
+                <span class="card-number">07</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="#" class="card-tp disabled" onclick="return false;">
+                <span class="card-number">08</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="#" class="card-tp disabled" onclick="return false;">
+                <span class="card-number">09</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="#" class="card-tp disabled" onclick="return false;">
+                <span class="card-number">10</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="#" class="card-tp disabled" onclick="return false;">
+                <span class="card-number">11</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="#" class="card-tp disabled" onclick="return false;">
+                <span class="card-number">12</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="#" class="card-tp disabled" onclick="return false;">
+                <span class="card-number">13</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="#" class="card-tp disabled" onclick="return false;">
+                <span class="card-number">14</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="#" class="card-tp disabled" onclick="return false;">
+                <span class="card-number">15</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+
+            <a href="#" class="card-tp disabled" onclick="return false;">
+                <span class="card-number">16</span>
+                <span class="card-label">Proyecto</span>
+            </a>
+        </main>
+
+    </div>
+
+    <footer>
+        <div class="footer-socials">
+            <a href="https://github.com/" target="_blank" class="btn-social">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://instagram.com/" target="_blank" class="btn-social">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+            <a href="mailto:tuemail@ejemplo.com" class="btn-social">
+                <i class="fas fa-envelope"></i> Contacto
+            </a>
+        </div>
+        <p class="footer-credits">© 2026 Curia Remix | Design & Bass Boosted</p>
+    </footer>
+
+    <script>
+        // --- 1. CONFIGURACIÓN DE CANVAS Y PARTÍCULAS (POLVO FLOTANTE) ---
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        const numberOfParticles = 40;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2.5 + 0.5;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * -0.5 - 0.2; // Suben despacio
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                // Si salen de la pantalla, vuelven abajo
+                if (this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
+                if (this.x < 0 || this.x > canvas.width) {
+                    this.speedX = -this.speedX;
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = "#00A8FF";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset para rendimiento
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+
+        // --- 2. EFECTO PARALLAX INTERACTIVO CON EL MOUSE (PARA EL FIAT UNO) ---
+        const carShowcase = document.getElementById('parallax-car');
+        
+        window.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
+            
+            // Inclinación leve interactiva basada en la posición del puntero
+            if (window.innerWidth > 768) { // Solo en PC para no romper rendimiento móvil
+                carShowcase.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            }
+        });
+
+        // Reset del auto al salir del viewport
+        window.addEventListener('mouseleave', () => {
+            carShowcase.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+    </script>
+</body>
 </html>
